@@ -16,8 +16,18 @@ WORKDIR /usr/src/app/
 COPY data-access.properties src/main/resources/spring/data-access.properties
 RUN mvn package -DskipTests
 
-# Open up the application to external traffic
+# Open up the web application to external traffic
 EXPOSE 9966
 
+# Use supervisord to keep collectd up and running
+RUN apt-get update
+RUN apt-get install -y collectd collectd-utils supervisor
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/*
+ADD collectd.conf /etc/collectd/collectd.conf
+ADD supervisord.conf /etc/supervisor/conf.d/collectd.conf
+
+ADD start.sh .
+
 # Start Tomcat with maven
-ENTRYPOINT ["mvn", "tomcat7:run"]
+ENTRYPOINT ["./start.sh"]
