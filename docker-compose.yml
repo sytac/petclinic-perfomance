@@ -1,6 +1,8 @@
 # Application containers
 petclinic:
   build: petclinic/
+  ports:
+    - "9966:9966"
   links:
     - db
     - logstash

@@ -13,6 +13,7 @@ ENV MAVEN_HOME /usr/share/maven
 # Checkout the app sources, patch to use MySQL and build
 RUN git clone https://github.com/spring-projects/spring-petclinic.git /usr/src/app/
 WORKDIR /usr/src/app/
+COPY pom.xml ./pom.xml
 COPY data-access.properties src/main/resources/spring/data-access.properties
 RUN mvn package -DskipTests
 
