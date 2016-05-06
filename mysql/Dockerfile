@@ -17,3 +17,5 @@ ADD collectd.conf /etc/collectd/collectd.conf
 ADD supervisord.conf /etc/supervisor/conf.d/collectd.conf
 
 ADD start.sh .
+RUN chmod +x start.sh
+ENTRYPOINT ["/start.sh"]

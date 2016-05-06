@@ -4,4 +4,4 @@
 supervisord
 
 # Start the database using the official startup script
-docker-entrypoint.sh
+docker-entrypoint.sh mysqld
