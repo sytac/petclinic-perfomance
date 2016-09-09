@@ -1,37 +1,38 @@
-# Application containers
-petclinic:
-  build: petclinic/
-  ports:
+version: '2'
+services:
+  petclinic:
+    build: petclinic/
+    ports:
     - "9966:9966"
-  links:
+    links:
     - db
     - logstash
-db:
-  build: mysql/
-  links:
+  db:
+    build: mysql/
+    links:
     - logstash
 
 # ELK stack used to aggregate and display performance data points
-elasticsearch:
-  image: elasticsearch:latest
-  command: elasticsearch -Des.network.host=0.0.0.0
-  ports:
+  elasticsearch:
+    image: elasticsearch:latest
+    command: elasticsearch -Des.network.host=0.0.0.0
+    ports:
     - "9200:9200"
     - "9300:9300"
-logstash:
-  image: logstash:latest
-  command: logstash -f /etc/logstash/conf.d/logstash.conf
-  volumes:
+  logstash:
+    image: logstash:latest
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+    volumes:
     - ./logstash/config:/etc/logstash/conf.d
-  ports:
+    ports:
     - "5000:5000"
-  links:
+    links:
     - elasticsearch
-kibana:
-  build: kibana/
-  volumes:
+  kibana:
+    build: kibana/
+    volumes:
     - ./kibana/config/:/opt/kibana/config/
-  ports:
+    ports:
     - "5601:5601"
-  links:
+    links:
     - elasticsearch
