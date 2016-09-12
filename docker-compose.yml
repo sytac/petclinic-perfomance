@@ -1,24 +1,34 @@
 version: '2'
 services:
-  petclinic:
-    build: petclinic/
+  webapp:
+    build: webapp/
     ports:
-    - "9966:9966"
+    - "80:8080"
+    - "8080:8080"
     links:
     - db
     - logstash
+    networks:
+    - default
+    # entrypoint: sleep
+    # command:
+    # - infinity
   db:
     build: mysql/
     links:
     - logstash
-
-# ELK stack used to aggregate and display performance data points
+    volumes: 
+    - dbdata:/var/lib/mysql:rw
+    networks:
+    - default
   elasticsearch:
     image: elasticsearch:latest
     command: elasticsearch -Des.network.host=0.0.0.0
     ports:
     - "9200:9200"
     - "9300:9300"
+    networks:
+    - default
   logstash:
     image: logstash:latest
     command: logstash -f /etc/logstash/conf.d/logstash.conf
@@ -28,6 +38,8 @@ services:
     - "5000:5000"
     links:
     - elasticsearch
+    networks:
+    - default
   kibana:
     build: kibana/
     volumes:
@@ -36,3 +48,11 @@ services:
     - "5601:5601"
     links:
     - elasticsearch
+    networks:
+    - default
+networks:
+  default:
+    driver: bridge
+volumes:
+  dbdata:
+    driver: local

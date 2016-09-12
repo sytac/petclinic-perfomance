@@ -4,4 +4,4 @@
 supervisord
 
 # Start the web app
-./mvnw -DskipTests tomcat7:run
+/run.sh
