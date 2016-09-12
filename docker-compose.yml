@@ -10,9 +10,6 @@ services:
     - logstash
     networks:
     - default
-    # entrypoint: sleep
-    # command:
-    # - infinity
   db:
     build: mysql/
     links:
